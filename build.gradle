@@ -3,6 +3,7 @@ plugins {
     id 'java'
     id 'org.asciidoctor.convert' version '1.5.3'
     id 'com.stehno.gradle.site' version '0.0.3'
+    id "io.github.gradle-nexus.publish-plugin" version "1.3.0"
 }
 
 group = 'com.ainrif.fg-net'
@@ -159,8 +160,8 @@ asciidoctor {
 }
 
 tasks.site.dependsOn = [
-    'build', 'http-builder-ng-core:build', 'http-builder-ng-apache:build',
-    'http-builder-ng-core:javadoc', 'http-builder-ng-apache:javadoc',
+    'build', 'core:build', 'http-builder-ng-apache:build',
+    'core:javadoc', 'http-builder-ng-apache:javadoc',
     'aggregateJavadoc', 'aggregateTestReport',
     'asciidoctor'
 ]
@@ -168,9 +169,8 @@ tasks.site.dependsOn = [
 site {
     siteUrl = 'https://http-builder-ng.github.io/http-builder-ng/'
 
-    assetDir( 'http-builder-ng-core/build/reports', into:'core', external:true )
+    assetDir( 'core/build/reports', into:'core', external:true )
     assetDir( 'http-builder-ng-apache/build/reports', into:'apache', external:true )
-    assetDir( 'http-builder-ng-okhttp/build/reports', into:'okhttp', external:true )
 
     versionedFile 'src/docs/asciidoc/index.adoc'
     versionedFile 'src/docs/asciidoc/configuration.adoc'
@@ -190,17 +190,13 @@ task verifyArtifacts(group: 'Verification', description: 'Verifies that the publ
         def base = 'https://dl.bintray.com/http-builder-ng/dclark/org/codehaus/groovy/modules'
         ///${project.version}/"
         def artifacts = [
-            "$base/http-builder-ng-core/$project.version/http-builder-ng-core-$project.version-sources.jar",
-            "$base/http-builder-ng-core/$project.version/http-builder-ng-core-${project.version}.jar",
-            "$base/http-builder-ng-core/$project.version/http-builder-ng-core-${project.version}.pom",
+            "$base/core/$project.version/core-$project.version-sources.jar",
+            "$base/core/$project.version/core-${project.version}.jar",
+            "$base/core/$project.version/core-${project.version}.pom",
 
             "$base/http-builder-ng-apache/$project.version/http-builder-ng-apache-$project.version-sources.jar",
             "$base/http-builder-ng-apache/$project.version/http-builder-ng-apache-${project.version}.jar",
             "$base/http-builder-ng-apache/$project.version/http-builder-ng-apache-${project.version}.pom",
-
-            "$base/http-builder-ng-okhttp/$project.version/http-builder-ng-okhttp-$project.version-sources.jar",
-            "$base/http-builder-ng-okhttp/$project.version/http-builder-ng-okhttp-${project.version}.jar",
-            "$base/http-builder-ng-okhttp/$project.version/http-builder-ng-okhttp-${project.version}.pom"
         ]
 
         logger.lifecycle "Verifying that artifacts exist at $base..."
@@ -217,9 +213,8 @@ task verifyArtifacts(group: 'Verification', description: 'Verifies that the publ
 
 task release(group: 'Development', description: 'Release a new version of the library.', dependsOn: [
     'checkVersion',
-    'clean', 'http-builder-ng-core:clean', 'http-builder-ng-apache:clean', 'http-builder-ng-okhttp:clean',
-    'build', 'http-builder-ng-core:build', 'http-builder-ng-apache:build', 'http-builder-ng-okhttp:build',
-    'http-builder-ng-core:bintrayUpload', 'http-builder-ng-apache:bintrayUpload', 'http-builder-ng-okhttp:bintrayUpload',
+    'clean', 'core:clean', 'http-builder-ng-apache:clean',
+    'build', 'core:build', 'http-builder-ng-apache:build',
     'publishSite'
 ]) {
     doLast {

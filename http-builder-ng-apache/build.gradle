@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation project(':http-builder-ng-core')
+    implementation project(':core')
 
     implementation 'org.apache.httpcomponents:httpclient:4.5.2'
     implementation 'org.apache.httpcomponents:httpmime:4.5.2'
@@ -13,7 +13,7 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.21'
     // ^^^
 
-    testImplementation project(path: ':http-builder-ng-core', configuration: 'testcode')
+    testImplementation project(path: ':core', configuration: 'testcode')
 }
 
 license {
