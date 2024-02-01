@@ -1,0 +1,170 @@
+= HttpBuilder-NG: Easy HTTP Client for Groovy (and Java)
+
+____
+
+Project is under rebuild. It's a hard fork of original https://github.com/http-builder-ng/http-builder-ng[HttpBuilder-NG]
+
+____
+
+== Quick Links for the Impatient
+
+* Site: https://http-builder-ng.github.io/http-builder-ng/
+* User Guide: https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/
+* JavaDocs: https://http-builder-ng.github.io/http-builder-ng/docs/javadoc/
+* Project: https://github.com/http-builder-ng/http-builder-ng
+* Twitter: https://twitter.com/HttpBuilderNG[@HttpBuilderNG]
+* StackOverflow: http://stackoverflow.com/questions/tagged/httpbuilder-ng[httpbuilder-ng]
+
+== Quick Overview
+
+Http Builder NG is a modern Groovy DSL for making http requests. It requires Java 8 and a modern Groovy. It is built against Groovy 2.4.x, but it doesn't make any assumptions about which version of Groovy you are using. The main goal of Http Builder NG is to allow you to make http requests in a natural and readable way. For example:
+
+[source,groovy]
+----
+//let's configure an http client to make calls to httpbin.org using the default http library
+def httpBin = HttpBuilder.configure {
+    request.uri = 'http://httpbin.org/'
+}
+
+//now let's GET /get endpoint at httpbin.
+//This will return a JSON formatted response with an origin property.
+def result = httpBin.get {
+    request.uri.path = '/get'
+}
+    
+println("Your ip address is: ${result.origin}")
+
+//Finally lets post a standard http form to httpbin
+httpBin.post {
+    request.uri.path = '/post'
+    request.body = [ input1: 'the first input', input2: 'the second input' ]
+    request.contentType = 'application/x-www-form-urlencoded'
+}
+
+----
+
+Hopefully that gives you a general idea of how Http Builder NG works. Http Builder NG is designed to be compatible with Groovy code annotated with http://docs.groovy-lang.org/latest/html/gapi/groovy/transform/TypeChecked.html[@TypeChecked] and http://docs.groovy-lang.org/latest/html/gapi/groovy/transform/CompileStatic.html[@CompileStatic]. It also makes use of the http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/DelegatesTo.html[@DelegatesTo] to provide better IDE support when writing code using Http Builder NG.
+
+== Artifacts
+
+Http Builder NG artifacts are available on https://bintray.com/http-builder-ng/dclark/http-builder-ng[Bintray] and Maven Central, for Gradle you can add the following dependency to your `build.gradle` file `dependencies` closure:
+
+----
+compile 'io.github.http-builder-ng:http-builder-ng-CLIENT:1.0.4'
+----
+
+or, for Maven add the following to your `pom.xml` file:
+
+----
+<dependency>
+  <groupId>io.github.http-builder-ng</groupId>
+  <artifactId>http-builder-ng-CLIENT</artifactId>
+  <version>1.0.4</version>
+</dependency>
+----
+
+where `CLIENT` is replaced with the client library name (`core`, `apache`, or `okhttp`).
+
+== Build Instructions
+
+HttpBuilder-NG is built using https://gradle.org[gradle]. To perform a complete build run the following:
+
+----
+`./gradlew clean build`
+----
+
+Test reports are not automatically generated; if you need a generated test report (aggregated or per-project) use:
+
+----
+`./gradlew clean build jacocoTestReport aggregateCoverage`
+----
+
+Note that the `aggregateCoverage` task may be dropped if the aggregated report is not desired. The reports will be generated in their respective `build/reports` directories, with the aggregated report being in the `build` directory of the project root.
+
+You can also generate the documentation using one of the following commands:
+
+* For the aggregated JavaDocs: `./gradlew aggregateJavaDoc`
+* For the project User Guide: `./gradlew asciidoctor`
+
+Overall project documentation may also be generated as the project web site, using the `site` task, discussed in the next section.
+
+== Documentation
+
+The documentation for the project consists of:
+
+* https://http-builder-ng.github.io/http-builder-ng/[Web site] - landing page and general introduction (`src/site` directory).
+* https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/[User Guide] - getting started, examples and detailed usage information (`src/docs/asciidoc` directory).
+* https://http-builder-ng.github.io/http-builder-ng/docs/javadoc[JavaDocs] - unified API documentation (throughout the codebase).
+* https://http-builder-ng.github.io/http-builder-ng/reports/allTests[Test], https://http-builder-ng.github.io/http-builder-ng/reports/jacoco/aggregateCoverage/html[Coverage] &amp; Quality reports - misc build and quality reports
+
+The documentation is provided by a unified documentation web site, which can be generated using:
+
+----
+./gradlew site
+----
+
+This task uses the http://cjstehno.github.io/gradle-site/[com.stehno.gradle.site] plugin to aggregate all the documentation sources and generate the project web site. Once it is built, you can verify the generated content by running a local server:
+
+----
+./gradlew startPreview
+----
+
+which will start a preview server (see http://cjstehno.github.io/gradle-webpreview-plugin/[com.stehno.gradle.webpreview]) on a random port copied to your clipboard. 
+
+To stop the preview server run:
+
+----
+./gradlew stopPreview`
+----
+
+Once you are ready to publish your site, simply run the following task:
+
+----
+./gradlew publishSite
+----
+
+This task will push the site contents into the `gh-pages` branch of the project, assuming you have permissions to push content into the repo.
+
+== Artifact Release
+
+When ready to release a new version of the project, perform the following steps starting in the `development` branch:
+
+. Ensure that the project version (in `build.gradle`) has been updated to the desired version.
+. Run `./gradlew updateVersion -Pfrom=OLD_VERSION` to update the documented version.
+. Create a Pull Request from `development` to `master` and accept it or have it reviewed.
+
+Once the pull request has been merged into `master`, checkout the `master` branch and:
+
+. Run `./gradlew release` which will check the documented project version against the project version, publish the artifact and the documentation web site.
+* You will need to provide (or have configured in your `HOME/.gradle/gradle.properties` file):
+** `user` - the Bintray username
+** `key` - the Bintray key/password
+** `sonotypeUser` - the Sonotype username (from API key)
+** `sonotypePass` - the Sonotype password (from API key)
+* This step may take some time (on the order of a minute or two depending on server response times).
+. Manually confirm the publication of the new artifact on the Bintray web site (or the publication will expire) - this step may no longer be needed, but verify anyway.
+. Run `./gradlew verifyRelease` to ensure that the artifacts and site have been published (optional but recommended).
+. A Git tag should be created for the released version.
+
+The `development` branch may now be used for the next round of development work.
+
+____
+
+NOTE: Since the artifacts must be confirmed and the site may need some installation time, the `verifyRelease` task cannot be combined with the `release` task.
+
+____
+
+== Version Updates
+
+When updating the version of the project, the documented version should also be updated using the `updateVersion` task. Modify the version in the project `build.gradle` file and make note of the existing version then run:
+
+----
+./gradlew updateVersion -Pfrom=OLD_VERSION
+----
+
+where `OLD_VERSION` is the pre-existing version of the project. This will update the current version mentioned in the documentation (e.g. README, User Guide and site).
+
+== Original Projects
+
+. https://github.com/http-builder-ng/http-builder-ng[HttpBuilder-NG]
+. https://github.com/jgritman/httpbuilder[jgritman/httpbuilder]

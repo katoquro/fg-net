@@ -1,18 +1,18 @@
 plugins {
     id "com.stehno.gradle.webpreview" version "0.3.0"
-    id 'com.github.kt3k.coveralls' version '2.8.1'
     id 'java'
-    id 'jacoco'
     id 'org.asciidoctor.convert' version '1.5.3'
     id 'com.stehno.gradle.site' version '0.0.3'
-    id "com.github.johnrengelman.shadow" version '2.0.1'
 }
 
-group = 'io.github.http-builder-ng'
-version = '1.0.4'
+group = 'com.ainrif.fg-net'
+version = '1.0.0-SNAPSHOT'
 
-repositories {
-    jcenter()
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
 }
 
 configurations {
@@ -25,20 +25,13 @@ dependencies {
 
 subprojects {
     apply plugin: 'groovy'
-    apply plugin: 'maven'
     apply plugin: 'maven-publish'
-    apply plugin: 'jacoco'
-    apply plugin: 'com.github.johnrengelman.shadow'
 
     group = project.parent.group
     version = project.parent.version
 
-    sourceCompatibility = 8
-    targetCompatibility = 8
-
-    repositories {
-        jcenter()
-    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
     configurations {
         asciidoclet
@@ -50,7 +43,9 @@ subprojects {
             'com.opencsv:opencsv:3.8',
             'oauth.signpost:signpost-commonshttp4:1.2.1.1',
             'oauth.signpost:signpost-core:1.2.1.1',
-            'org.codehaus.groovy:groovy-all:2.4.8',
+            'org.apache.groovy:groovy:4.0.18',
+            'org.apache.groovy:groovy-json:4.0.18',
+            'org.apache.groovy:groovy-xml:4.0.18',
             'org.jsoup:jsoup:1.9.2',
             'net.sourceforge.nekohtml:nekohtml:1.9.22',
             'com.fasterxml.jackson.core:jackson-databind:2.8.1',
@@ -58,18 +53,18 @@ subprojects {
             'com.sun.mail:javax.mail:1.5.6'
         ].each { opt ->
             compileOnly(opt)
-            testCompile(opt)
+            testImplementation(opt)
         }
 
-        testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+        testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
 
-        testCompile 'com.stehno.ersatz:ersatz:1.5.0:safe@jar'
-        testCompile 'org.hamcrest:hamcrest-library:1.3'
+        testImplementation 'com.stehno.ersatz:ersatz:1.9.0:safe@jar'//1.5.0'
+        testImplementation 'org.hamcrest:hamcrest-library:1.3'
 
-        testCompile 'com.stehno.vanilla:vanilla-core:0.5.1'
+        testImplementation 'org.slf4j:jcl-over-slf4j:1.7.25'
+        testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
-        testCompile 'org.slf4j:jcl-over-slf4j:1.7.25'
-        testCompile 'ch.qos.logback:logback-classic:1.2.3'
+        testImplementation 'junit:junit:4.13.2'
 
         asciidoclet 'org.asciidoctor:asciidoclet:1.+'
     }
@@ -78,13 +73,6 @@ subprojects {
         systemProperty 'test.proxy.support', 'false'
         reports.html.enabled = true
         maxParallelForks = 4
-    }
-
-    jacocoTestReport {
-        reports {
-            xml.enabled = false
-            html.enabled = false
-        }
     }
 
     javadoc {
@@ -112,7 +100,6 @@ subprojects {
         archives jar
         archives sourcesJar
         archives javadocJar
-        archives shadowJar
     }
 
     publishing {
@@ -121,7 +108,6 @@ subprojects {
                 from components.java
                 artifact sourcesJar
                 artifact javadocJar
-                artifact shadowJar
                 groupId project.group
                 artifactId project.name
                 version project.version
@@ -173,11 +159,9 @@ asciidoctor {
 }
 
 tasks.site.dependsOn = [
-    'build', 'http-builder-ng-core:build', 'http-builder-ng-apache:build', 'http-builder-ng-okhttp:build',
-    'http-builder-ng-core:javadoc', 'http-builder-ng-apache:javadoc', 'http-builder-ng-okhttp:javadoc',
-    'http-builder-ng-core:jacocoTestReport', 'http-builder-ng-apache:jacocoTestReport', 'http-builder-ng-okhttp:jacocoTestReport',
-    'http-builder-ng-core:spotbugsMain', 'http-builder-ng-apache:spotbugsMain', 'http-builder-ng-okhttp:spotbugsMain',
-    'aggregateJavadoc', 'aggregateTestReport', 'aggregateCoverage',
+    'build', 'http-builder-ng-core:build', 'http-builder-ng-apache:build',
+    'http-builder-ng-core:javadoc', 'http-builder-ng-apache:javadoc',
+    'aggregateJavadoc', 'aggregateTestReport',
     'asciidoctor'
 ]
 
@@ -266,32 +250,8 @@ task aggregateJavadoc(type: Javadoc, group: 'Documentation') {
     options.addStringOption "-attribute", "name=${project.name},version=${project.version},title-link=https://github.com/http-builder-ng/http-builder-ng[${project.name} ${project.version}]"
 }
 
-task aggregateCoverage(type: JacocoReport, group: 'Coverage reports') {
-    description = 'Generates an aggregate report from all subprojects'
-
-    dependsOn(publishedProjects.test)
-
-    additionalSourceDirs = files(publishedProjects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories = files(publishedProjects.sourceSets.main.allSource.srcDirs)
-    classDirectories = files(publishedProjects.sourceSets.main.output)
-    executionData = files(publishedProjects.jacocoTestReport.executionData)
-
-    doFirst {
-        executionData = files(executionData.findAll { it.exists() })
-    }
-
-    reports {
-        html.enabled = true // human readable
-        xml.enabled = true // required by coveralls
-    }
-}
 
 task aggregateTestReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/allTests")
     reportOn subprojects*.test
-}
-
-coveralls {
-    sourceDirs = publishedProjects.sourceSets.main.allSource.srcDirs.flatten()
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }

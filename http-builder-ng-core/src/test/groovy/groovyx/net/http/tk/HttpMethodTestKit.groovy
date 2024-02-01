@@ -18,10 +18,16 @@ package groovyx.net.http.tk
 import com.stehno.ersatz.Decoders
 import com.stehno.ersatz.Encoders
 import com.stehno.ersatz.ErsatzServer
+import groovy.xml.XmlSlurper
 import org.jsoup.Jsoup
 import spock.lang.AutoCleanup
 
-import static com.stehno.ersatz.ContentType.*
+import static com.stehno.ersatz.ContentType.APPLICATION_JSON
+import static com.stehno.ersatz.ContentType.APPLICATION_URLENCODED
+import static com.stehno.ersatz.ContentType.APPLICATION_XML
+import static com.stehno.ersatz.ContentType.TEXT_HTML
+import static com.stehno.ersatz.ContentType.TEXT_JSON
+import static com.stehno.ersatz.ContentType.TEXT_PLAIN
 
 /**
  * Base test kit for testing HTTP method handling by different client implementations.
@@ -58,7 +64,7 @@ abstract class HttpMethodTestKit extends TestKit {
         decoder APPLICATION_URLENCODED, Decoders.urlEncoded
     })
 
-    protected String serverUri(final String protocol){
+    protected String serverUri(final String protocol) {
         "${protocol == 'HTTPS' ? ersatzServer.httpsUrl : ersatzServer.httpUrl}"
     }
 

@@ -15,12 +15,9 @@
  */
 package groovyx.net.http.optional;
 
-import groovy.util.XmlSlurper;
-import groovyx.net.http.ChainedHttpConfig;
-import groovyx.net.http.FromServer;
-import groovyx.net.http.NativeHandlers;
-import groovyx.net.http.ToServer;
-import groovyx.net.http.TransportingException;
+import groovy.xml.XmlSlurper;
+import groovy.xml.slurpersupport.GPathResult;
+import groovyx.net.http.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.xml.sax.SAXException;
@@ -51,7 +48,7 @@ public class Html {
      *
      * @param config the chained configuration
      * @param fromServer the server response adapter
-     * @return the parsed HTML content (a {@link groovy.util.slurpersupport.GPathResult} object)
+     * @return the parsed HTML content (a {@link GPathResult} object)
      */
     public static Object neckoParse(final ChainedHttpConfig config, final FromServer fromServer) {
         try {

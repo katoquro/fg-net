@@ -15,10 +15,9 @@
  */
 package groovyx.net.http.util
 
-import spock.lang.Specification
 
-import static com.stehno.vanilla.test.Randomizers.forByteArray
-import static com.stehno.vanilla.test.Randomizers.random
+import org.apache.commons.lang3.RandomUtils
+import spock.lang.Specification
 
 class IoUtilsSpec extends Specification {
 
@@ -28,9 +27,9 @@ class IoUtilsSpec extends Specification {
 
         where:
         bytes << [
-            random(forByteArray(10..10)),
-            random(forByteArray(1000..1000)),
-            random(forByteArray(10000..10000))
+                RandomUtils.nextBytes(10),
+                RandomUtils.nextBytes(1000),
+                RandomUtils.nextBytes(10000),
         ]
     }
 

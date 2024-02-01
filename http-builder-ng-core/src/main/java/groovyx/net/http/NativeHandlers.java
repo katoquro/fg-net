@@ -20,9 +20,9 @@ import groovy.json.JsonSlurper;
 import groovy.lang.Closure;
 import groovy.lang.GString;
 import groovy.lang.Writable;
-import groovy.util.XmlSlurper;
-import groovy.util.slurpersupport.GPathResult;
 import groovy.xml.StreamingMarkupBuilder;
+import groovy.xml.XmlSlurper;
+import groovy.xml.slurpersupport.GPathResult;
 import groovyx.net.http.util.IoUtils;
 import org.apache.xml.resolver.Catalog;
 import org.apache.xml.resolver.CatalogManager;
@@ -78,8 +78,8 @@ public class NativeHandlers {
      */
     public static Object exception(final Throwable thrown) {
         final RuntimeException rethrow = ((thrown instanceof RuntimeException) ?
-            (RuntimeException) thrown :
-            new RuntimeException(thrown));
+                (RuntimeException) thrown :
+                new RuntimeException(thrown));
         throw rethrow;
     }
 
@@ -140,8 +140,8 @@ public class NativeHandlers {
             }
 
             final String msg = String.format("Cannot encode bodies of type %s, only bodies of: %s",
-                type.getName(),
-                Arrays.stream(allowedTypes).map(Class::getName).collect(Collectors.joining(", ")));
+                    type.getName(),
+                    Arrays.stream(allowedTypes).map(Class::getName).collect(Collectors.joining(", ")));
 
             throw new IllegalArgumentException(msg);
         }
@@ -307,8 +307,8 @@ public class NativeHandlers {
 
             final Object body = checkNull(request.actualBody());
             final String json = ((body instanceof String || body instanceof GString)
-                ? body.toString()
-                : new JsonBuilder(body).toString());
+                    ? body.toString()
+                    : new JsonBuilder(body).toString());
             ts.toServer(stringToStream(json, request.actualCharset()));
         }
     }
