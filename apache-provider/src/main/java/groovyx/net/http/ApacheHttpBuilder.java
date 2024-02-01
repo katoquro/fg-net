@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2017 HttpBuilder-NG Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -71,7 +71,7 @@ import static groovyx.net.http.util.IoUtils.transfer;
 
 /**
  * `HttpBuilder` implementation based on the https://hc.apache.org/httpcomponents-client-ga/[Apache HttpClient library].
- * 
+ *
  * Generally, this class should not be used directly, the preferred method of instantiation is via one of the two static `configure()` methods of this
  * class or using one of the `configure` methods of `HttpBuilder` with a factory function for this builder.
  */
@@ -82,11 +82,11 @@ public class ApacheHttpBuilder extends HttpBuilder {
 
     /**
      * Creates an `HttpBuilder` using the `ApacheHttpBuilder` factory instance configured with the provided configuration closure.
-     * 
+     *
      * The configuration closure delegates to the {@link HttpObjectConfig} interface, which is an extension of the {@link HttpConfig} interface -
      * configuration properties from either may be applied to the global client configuration here. See the documentation for those interfaces for
      * configuration property details.
-     * 
+     *
      * [source,groovy]
      * ----
      * def http = HttpBuilder.configure {
@@ -102,14 +102,15 @@ public class ApacheHttpBuilder extends HttpBuilder {
     }
 
     /**
+     * {@code
      * Creates an `HttpBuilder` using the `ApacheHttpBuilder` factory instance configured with the provided configuration function.
-     * 
+     *
      * The configuration {@link Consumer} function accepts an instance of the {@link HttpObjectConfig} interface, which is an extension of the {@link HttpConfig}
      * interface - configuration properties from either may be applied to the global client configuration here. See the documentation for those interfaces for
      * configuration property details.
-     * 
+     *
      * This configuration method is generally meant for use with standard Java.
-     * 
+     *
      * [source,java]
      * ----
      * HttpBuilder.configure(new Consumer<HttpObjectConfig>() {
@@ -118,15 +119,16 @@ public class ApacheHttpBuilder extends HttpBuilder {
      * }
      * });
      * ----
-     * 
+     *
      * Or, using lambda expressions:
-     * 
+     *
      * [source,java]
      * ----
      * HttpBuilder.configure(config -> {
      * config.getRequest().setUri(format("http://localhost:%d", serverRule.getPort()));
      * });
      * ----
+     * }
      *
      * @param configuration the configuration function (accepting {@link HttpObjectConfig})
      * @return the configured `HttpBuilder`

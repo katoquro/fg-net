@@ -343,6 +343,7 @@ public interface HttpConfig {
         Map<String, CharSequence> getHeaders();
 
         /**
+         * {@code
          * The `headers` property allows the direct specification of the request headers as a `Map<String,String>`. Be aware that `Content-Type` and
          * `Accept` are actually header values and it is up to the implementation to determine which configuration will win out if both are configured.
          *
@@ -364,6 +365,7 @@ public interface HttpConfig {
          * ----
          *
          * WARNING: The headers are additive; however, a header specified in the verb configuration may overwrite one defined in the global configuration.
+         * }
          *
          * @param toAdd the headers to be added to the request headers
          */
@@ -556,6 +558,7 @@ public interface HttpConfig {
         }
 
         /**
+         * {@code
          * Configures the execution of the provided function "when" the given status occurs in the response. The `function` will be called with an instance
          * of the response as a `FromServer` instance and the response body as an `Object` (if there is one). The value returned from the closure will be
          * used as the result value of the request; this allows the closure to modify the captured response.
@@ -577,6 +580,7 @@ public interface HttpConfig {
          *
          * This method is the same as calling either the `success(BiFunction)` or `failure(BiFunction)` methods. Only one function may be mapped to each
          * status.
+         * }
          *
          * @param status the response {@link Status} enum
          * @param function the function to be executed
@@ -584,6 +588,7 @@ public interface HttpConfig {
         void when(Status status, BiFunction<FromServer, Object, ?> function);
 
         /**
+         * {@code
          * Configures the execution of the provided closure "when" the given status code occurs in the response. The `closure` will be called with an instance
          * of the response as a `FromServer` instance. The value returned from the closure will be used as the result value of the request; this allows
          * the closure to modify the captured response.
@@ -601,6 +606,7 @@ public interface HttpConfig {
          *      }
          * }
          * ----
+         * }
          *
          * @param code the response code to be caught
          * @param closure the closure to be executed
@@ -610,6 +616,7 @@ public interface HttpConfig {
         }
 
         /**
+         * {@code
          * Configures the execution of the provided function "when" the given status code occurs in the response. The `function` will be called with an instance
          * of the response as a `FromServer` instance and the response body as an `Object` (if there is one). The value returned from the closure will be
          * used as the result value of the request; this allows the closure to modify the captured response.
@@ -631,6 +638,7 @@ public interface HttpConfig {
          *
          * This method is the same as calling either the `success(BiFunction)` or `failure(BiFunction)` methods. Only one function may be mapped to each
          * status.
+         * }
          *
          * @param code the response code
          * @param function the function to be executed
@@ -638,6 +646,7 @@ public interface HttpConfig {
         void when(Integer code, BiFunction<FromServer, Object, ?> function);
 
         /**
+         * {@code
          * Configures the execution of the provided closure "when" the given status code (as a String) occurs in the response. The `closure` will be
          * called with an instance of the response as a `FromServer` instance. The value returned from the closure will be used as the result value
          * of the request; this allows the closure to modify the captured response.
@@ -655,6 +664,7 @@ public interface HttpConfig {
          *      }
          * }
          * ----
+         * }
          *
          * @param code the response code to be caught
          * @param closure the closure to be executed
@@ -664,6 +674,7 @@ public interface HttpConfig {
         }
 
         /**
+         * {@code
          * Configures the execution of the provided function "when" the given status code (as a `String`) occurs in the response. The `function` will be
          * called with an instance of the response as a `FromServer` instance and the response body as an `Object` (if there is one). The value returned
          * from the function will be used as the result value of the request; this allows the function to modify the captured response.
@@ -682,7 +693,7 @@ public interface HttpConfig {
          *     });
          * });
          * ----
-         *
+         * }
          * @param code the response code as a `String`
          * @param function the function to be executed
          */
@@ -697,6 +708,7 @@ public interface HttpConfig {
         BiFunction<FromServer, Object, ?> when(Integer code);
 
         /**
+         * {@code
          * Configures the execution of the provided closure "when" a successful response is received (code < 400). The `closure` will be called with
          * an instance of the response as a `FromServer` instance. The value returned from the closure will be used as the result value of the request;
          * this allows the closure to modify the captured response.
@@ -716,6 +728,7 @@ public interface HttpConfig {
          * ----
          *
          * This method is the same as calling either the `when(Status.SUCCESS, Closure)` method.
+         * }
          *
          * @param closure the closure to be executed
          */
@@ -724,6 +737,7 @@ public interface HttpConfig {
         }
 
         /**
+         * {@code
          * Configures the execution of the provided function when a success response is received (code < 400). The `function` will be called with
          * an instance of the response as a `FromServer` instance and the body content as an `Object` (if present). The value returned from the function
          * will be used as the result value of the request; this allows the function to modify the captured response.
@@ -744,12 +758,13 @@ public interface HttpConfig {
          * ----
          *
          * This method is the same as calling either the `when(Status.SUCCESS, BiFunction)` method.
-         *
+         * }
          * @param function the closure to be executed
          */
         void success(BiFunction<FromServer, Object, ?> function);
 
         /**
+         * {@code
          * Configures the execution of the provided closure "when" a failure response is received (code >= 400). The `closure` will be called with
          * an instance of the response as a `FromServer` instance. The value returned from the closure will be used as the result value of the request;
          * this allows the closure to modify the captured response.
@@ -769,7 +784,7 @@ public interface HttpConfig {
          * ----
          *
          * This method is the same as calling either the `when(Status.FAILURE, Closure)` method.
-         *
+         * }
          * @param closure the closure to be executed
          */
         default void failure(Closure<?> closure) {
@@ -777,6 +792,7 @@ public interface HttpConfig {
         }
 
         /**
+         * {@code
          * Configures the execution of the provided function "when" a failure response is received (code >= 400). The `function` will be called with
          * an instance of the response as a `FromServer` instance and the body content as an `Object` (if present). The value returned from the function
          * will be used as the result value of the request; this allows the function to modify the captured response.
@@ -797,12 +813,13 @@ public interface HttpConfig {
          * ----
          *
          * This method is the same as calling either the `when(Status.FAILURE, BiFunction)` method.
-         *
+         * }
          * @param function the closure to be executed
          */
         void failure(BiFunction<FromServer, Object, ?> function);
 
         /**
+         * {@code
          * Configures the execution of the provided closure to handle exceptions during request/response processing. This is
          * different from a failure condition because there is no response, no status code, no headers, etc. The `closure` will be called with
          * the best guess as to what was the original exception. Some attempts will be made to unwrap exceptions that are of type
@@ -830,7 +847,7 @@ public interface HttpConfig {
          *
          * The default exception method wraps the exception in a {@link java.lang.RuntimeException} (if it is
          * not already of that type) and rethrows.
-         *
+         * }
          * @param closure the closure to be executed
          */
         default void exception(Closure<?> closure) {
@@ -838,6 +855,7 @@ public interface HttpConfig {
         }
 
         /**
+         * {@code
          * Configures the execution of the provided `function` to handle exceptions during request/response processing. This is
          * different from a failure condition because there is no response, no status code, no headers, etc. The `function` will be called with
          * the best guess as to what was the original exception. Some attempts will be made to unwrap exceptions that are of type
@@ -865,7 +883,7 @@ public interface HttpConfig {
          *
          * The built in exception method wraps the exception in a {@link java.lang.RuntimeException} (if it is
          * not already of that type) and rethrows.
-         *
+         * }
          * @param function the function to be executed
          */
         void exception(Function<Throwable,?> function);

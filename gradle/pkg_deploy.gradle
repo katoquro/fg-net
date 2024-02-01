@@ -13,11 +13,10 @@ jar {
     }
 }
 
-// current project javadoc are written in ascidoc adn default java cannot process them
-//task javadocJar(type: Jar, dependsOn: javadoc) {
-//    archiveClassifier.set('javadoc')
-//    from javadoc
-//}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set('javadoc')
+    from javadoc
+}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     archiveClassifier.set('sources')
@@ -39,7 +38,7 @@ publishing {
             from components.java
 
             artifact sourcesJar
-            // artifact javadocJar
+            artifact javadocJar
         }
     }
 }

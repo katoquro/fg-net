@@ -27,9 +27,11 @@ import static groovyx.net.http.ContentTypes.MULTIPART_MIXED;
 import static java.lang.String.format;
 
 /**
+ * {@code
  * Generic content encoders for use with all client implementations. Note that there may be client-specific implementations for some of these (see
  * {@link groovyx.net.http.ApacheEncoders} for more information).
- * 
+ * }
+ *
  * See the {@link MultipartContent} class documentation for more configuration details.
  */
 public class CoreEncoders {

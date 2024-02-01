@@ -34,6 +34,7 @@ import java.util.function.Function;
 import static java.util.Collections.*;
 
 /**
+ * {@code
  * This class is the main entry point into the "HttpBuilder-NG" API. It provides access to the HTTP Client configuration and the HTTP verbs to be
  * executed.
  *
@@ -78,6 +79,7 @@ import static java.util.Collections.*;
  * :linkattrs:
  *
  * See the HTTP verb method docs (below) or the https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/[User Guide^] for more examples.
+ * }
  */
 public abstract class HttpBuilder implements Closeable {
 
@@ -89,6 +91,7 @@ public abstract class HttpBuilder implements Closeable {
     static Closure NO_OP = new MethodClosure(HttpBuilder.class, "noOp");
 
     /**
+     * {@code
      * Creates an `HttpBuilder` with the default configuration using the provided factory function ({@link JavaHttpBuilder} or
      * one of the other HTTP client implementation functions.
      *
@@ -98,7 +101,8 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * When configuring the `HttpBuilder` with this method, the verb configurations are required to specify the `request.uri` property.
-     *
+     * }
+     * 
      * @param factory the `HttpObjectConfig` factory function ({@link JavaHttpBuilder} or one of the other HTTP client implementation functions
      * @return the configured `HttpBuilder`
      */
@@ -107,6 +111,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Creates an `HttpBuilder` using the `JavaHttpBuilder` factory instance configured with the provided configuration closure.
      *
      * The configuration closure delegates to the {@link HttpObjectConfig} interface, which is an extension of the {@link HttpConfig} interface -
@@ -119,7 +124,7 @@ public abstract class HttpBuilder implements Closeable {
      *     request.uri = 'http://localhost:10101'
      * }
      * ----
-     *
+     * }
      * @param closure the configuration closure (delegated to {@link HttpObjectConfig})
      * @return the configured `HttpBuilder`
      */
@@ -128,6 +133,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Creates an `HttpBuilder` configured with the provided configuration closure, using the `defaultFactory` as the client factory.
      *
      * The configuration closure delegates to the {@link HttpObjectConfig} interface, which is an extension of the {@link HttpConfig} interface -
@@ -142,8 +148,9 @@ public abstract class HttpBuilder implements Closeable {
      *     request.uri = 'http://localhost:10101'
      * }
      * ----
+     * }
      *
-     * @param factory the {@link HttpObjectConfig} factory function ({@link JavaHttpBuilder} or {@link groovyx.net.http.ApacheHttpBuilder})
+     * @param factory the {@link HttpObjectConfig} factory function ({@link JavaHttpBuilder} or {@code groovyx.net.http.ApacheHttpBuilder})
      * @param closure the configuration closure (delegated to {@link HttpObjectConfig})
      * @return the configured `HttpBuilder`
      */
@@ -156,6 +163,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Creates an `HttpBuilder` using the `JavaHttpBuilder` factory instance configured with the provided configuration function.
      *
      * The configuration {@link Consumer} function accepts an instance of the {@link HttpObjectConfig} interface, which is an extension of the {@link HttpConfig}
@@ -181,6 +189,7 @@ public abstract class HttpBuilder implements Closeable {
      *     config.getRequest().setUri(format("http://localhost:%d", serverRule.getPort()));
      * });
      * ----
+     * }
      *
      * @param configuration the configuration function (accepting {@link HttpObjectConfig})
      * @return the configured `HttpBuilder`
@@ -190,6 +199,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Creates an `HttpBuilder` using the provided client factory function, configured with the provided configuration function.
      *
      * The configuration {@link Consumer} function accepts an instance of the {@link HttpObjectConfig} interface, which is an extension of the {@link HttpConfig}
@@ -215,8 +225,9 @@ public abstract class HttpBuilder implements Closeable {
      *     config.getRequest().setUri("http://localhost:10101");
      * });
      * ----
+     * }
      *
-     * @param factory the {@link HttpObjectConfig} factory function ({@link JavaHttpBuilder} or {@link groovyx.net.http.optional.ApacheHttpBuilder})
+     * @param factory the {@link HttpObjectConfig} factory function ({@link JavaHttpBuilder} or {@code groovyx.net.http.optional.ApacheHttpBuilder})
      * @param configuration the configuration function (accepting {@link HttpObjectConfig})
      * @return the configured `HttpBuilder`
      */
@@ -416,6 +427,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous GET request on the configured URI (asynchronous alias to `get(Consumer)`), with additional configuration provided by the
      * configuration function.
      *
@@ -433,7 +445,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` function allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param configuration the additional configuration closure (delegated to {@link HttpConfig})
      * @return the resulting content wrapped in a {@link CompletableFuture}
      */
@@ -442,6 +454,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes asynchronous GET request on the configured URI (alias for the `get(Class, Closure)` method), with additional configuration provided by
      * the configuration closure. The result will be cast to the specified `type`.
      *
@@ -457,7 +470,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The configuration `closure` allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param type the type of the response content
      * @param closure the additional configuration closure (delegated to {@link HttpConfig})
      * @return the {@link CompletableFuture} for the resulting content cast to the specified type
@@ -607,6 +620,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous HEAD request on the configured URI (asynchronous alias to `head(Consumer)`), with additional configuration provided by the
      * configuration function.
      *
@@ -624,7 +638,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` function allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param configuration the additional configuration closure (delegated to {@link HttpConfig})
      * @return the resulting content wrapped in a {@link CompletableFuture}
      */
@@ -803,6 +817,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous POST request on the configured URI (asynchronous alias to `post(Consumer)`), with additional configuration provided by the
      * configuration function.
      *
@@ -820,7 +835,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` function allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param configuration the additional configuration closure (delegated to {@link HttpConfig})
      * @return the resulting content wrapped in a {@link CompletableFuture}
      */
@@ -829,6 +844,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous POST request on the configured URI (asynchronous alias to the `post(Class,Closure)` method), with additional
      * configuration provided by the configuration closure. The result will be cast to the specified `type`.
      *
@@ -849,7 +865,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The configuration `closure` allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param closure the additional configuration closure (delegated to {@link HttpConfig})
      * @return the {@link CompletableFuture} containing the result of the request
      */
@@ -858,6 +874,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous POST request on the configured URI (asynchronous alias to `put(Class,Consumer)`), with additional configuration provided
      * by the configuration function. The result will be cast to the specified `type`.
      *
@@ -875,7 +892,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` {@link Consumer} allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param type the type of the response content
      * @param configuration the additional configuration function (delegated to {@link HttpConfig})
      * @return the resulting content cast to the specified type, wrapped in a {@link CompletableFuture}
@@ -1001,6 +1018,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous PUT request on the configured URI (asynchronous alias to `put(Consumer)`), with additional configuration provided by the
      * configuration function.
      *
@@ -1018,7 +1036,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` function allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param configuration the additional configuration closure (delegated to {@link HttpConfig})
      * @return the resulting content wrapped in a {@link CompletableFuture}
      */
@@ -1027,6 +1045,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous PUT request on the configured URI (asynchronous alias to the `put(Class,Closure)` method), with additional
      * configuration provided by the configuration closure. The result will be cast to the specified `type`.
      *
@@ -1047,6 +1066,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The configuration `closure` allows additional configuration for this request based on the {@link HttpConfig} interface.
+     * }
      *
      * @param closure the additional configuration closure (delegated to {@link HttpConfig})
      * @return the {@link CompletableFuture} containing the result of the request
@@ -1056,6 +1076,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous PUT request on the configured URI (asynchronous alias to `put(Class,Consumer)`), with additional configuration provided
      * by the configuration function. The result will be cast to the specified `type`.
      *
@@ -1073,6 +1094,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` {@link Consumer} allows additional configuration for this request based on the {@link HttpConfig} interface.
+     * }
      *
      * @param type the type of the response content
      * @param configuration the additional configuration function (delegated to {@link HttpConfig})
@@ -1083,6 +1105,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes a DELETE request on the configured URI. The `request.uri` property should be configured in the global client configuration in order to
      * have a target for the request.
      *
@@ -1093,7 +1116,8 @@ public abstract class HttpBuilder implements Closeable {
      * }
      * def result = http.delete()
      * ----
-     *
+     * }
+     * 
      * @return the resulting content
      */
     public Object delete() {
@@ -1101,6 +1125,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an DELETE request on the configured URI, with additional configuration provided by the configuration closure. The result will be cast
      * to the specified `type`.
      *
@@ -1118,6 +1143,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The configuration `closure` allows additional configuration for this request based on the {@link HttpConfig} interface.
+     * }
      *
      * @param closure the additional configuration closure (delegated to {@link HttpConfig})
      * @return the result of the request cast to the specified type
@@ -1127,6 +1153,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes a DELETE request on the configured URI, with additional configuration provided by the configuration function. The result will be cast to
      * the specified `type`.
      *
@@ -1141,7 +1168,8 @@ public abstract class HttpBuilder implements Closeable {
      *     config.getRequest().getUri().setPath("/foo");
      * });
      * ----
-     *
+     * }
+     * 
      * The `configuration` {@link Consumer} allows additional configuration for this request based on the {@link HttpConfig} interface.
      *
      * @param type the type of the response content
@@ -1195,6 +1223,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous DELETE request on the configured URI (asynchronous alias to the `delete(Consumer)` method), with additional
      * configuration provided by the configuration function.
      *
@@ -1212,7 +1241,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The configuration `closure` allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param configuration the additional configuration function (delegated to {@link HttpConfig})
      * @return the {@link CompletableFuture} containing the result of the request
      */
@@ -1221,6 +1250,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous DELETE request on the configured URI (asynchronous alias to the `delete(Class,Closure)` method), with additional
      * configuration provided by the configuration closure. The result will be cast to the specified `type`.
      *
@@ -1239,7 +1269,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The configuration `closure` allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param type the type of the resulting object
      * @param closure the additional configuration closure (delegated to {@link HttpConfig})
      * @return the {@link CompletableFuture} containing the result of the request
@@ -1249,6 +1279,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous DELETE request on the configured URI (asynchronous alias to the `delete(Class,Consumer)` method), with additional
      * configuration provided by the configuration function. The result will be cast to the specified `type`.
      *
@@ -1266,7 +1297,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The configuration `closure` allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param type the type of the resulting object
      * @param configuration the additional configuration function (delegated to {@link HttpConfig})
      * @return the {@link CompletableFuture} containing the result of the request
@@ -1667,6 +1698,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous PATCH request on the configured URI (asynchronous alias to `patch(Consumer)`), with additional configuration provided by the
      * configuration function.
      *
@@ -1684,7 +1716,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` function allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param configuration the additional configuration closure (delegated to {@link HttpConfig})
      * @return the resulting content wrapped in a {@link CompletableFuture}
      */
@@ -1904,6 +1936,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous OPTIONS request on the configured URI (asynchronous alias to `options(Consumer)`), with additional configuration
      * provided by the configuration function.
      *
@@ -1921,6 +1954,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` function allows additional configuration for this request based on the {@link HttpConfig} interface.
+     * }
      *
      * @param configuration the additional configuration closure (delegated to {@link HttpConfig})
      * @return the resulting content wrapped in a {@link CompletableFuture}
@@ -2141,6 +2175,7 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Executes an asynchronous TRACE request on the configured URI (asynchronous alias to `trace(Consumer)`), with additional configuration
      * provided by the configuration function.
      *
@@ -2158,7 +2193,7 @@ public abstract class HttpBuilder implements Closeable {
      * ----
      *
      * The `configuration` function allows additional configuration for this request based on the {@link HttpConfig} interface.
-     *
+     * }
      * @param configuration the additional configuration closure (delegated to {@link HttpConfig})
      * @return the resulting content wrapped in a {@link CompletableFuture}
      */
@@ -2220,13 +2255,14 @@ public abstract class HttpBuilder implements Closeable {
     }
 
     /**
+     * {@code
      * Used to retrieve the instance of the internal client implementation. All client configuration will have been performed by the time this
      * method is accessible. If additional configuration is desired and not supported by HttpBuilder-NG directly, you should use the
      * `HttpObjectConfig::Client::clientCustomizer(Consumer<Object>)` method.
      *
      * This functionality is optional and client-implementation-dependent. If access to the internal client is not supported, an
      * {@link UnsupportedOperationException} will be thrown.
-     *
+     * }
      * @return a reference to the internal client implementation used (or null if not supported)
      */
     public abstract Object getClientImplementation();

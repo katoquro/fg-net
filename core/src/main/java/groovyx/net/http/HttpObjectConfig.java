@@ -101,6 +101,7 @@ public interface HttpObjectConfig extends HttpConfig {
         SSLContext getSslContext();
 
         /**
+         * {@code
          * Configures an interceptor (similar to an Http Servlet filter) which allows operations to be performed before and after a request, even alteration
          * of the data.
          *
@@ -117,6 +118,7 @@ public interface HttpObjectConfig extends HttpConfig {
          * ----
          *
          * The example above would return the elapsed time for the request as the result of the request.
+         * }
          *
          * @param verb the HTTP verb to intercept
          * @param func the interceptor function
@@ -223,6 +225,7 @@ public interface HttpObjectConfig extends HttpConfig {
         boolean getCookiesEnabled();
 
         /**
+         * {@code
          * A `Consumer<Object>` may be provided, which will have the internal client implementation reference passed into it to allow further
          * client configuration beyond what it supported directly by HttpBuilder-NG. The `Object` passed in will be an instance of the internal client
          * builder type, not necessarily the client itself.
@@ -231,7 +234,7 @@ public interface HttpObjectConfig extends HttpConfig {
          * configuration interfaces. Configuring in this manner may override helpful configuration already applied by the library.
          *
          * Note that a Groovy closure may be used to replace the `Consumer` with no modification of functionality.
-         *
+         * }
          * This operation is optional. If a client-implementation does not support it, an {@link UnsupportedOperationException} will be thrown.
          */
         void clientCustomizer(Consumer<Object> customizer);
