@@ -1,27 +1,16 @@
 plugins {
-//    id 'java-library' // looks like issue with testcode dependency
-    id "com.github.hierynomus.license" version "0.13.1"
+    id 'java-library'
 }
+
+apply from: "$rootDir/gradle/pkg_deploy.gradle"
 
 configurations {
     testcode
 }
 
 dependencies {
-    implementation 'xml-resolver:xml-resolver:1.2'
-    implementation 'org.slf4j:slf4j-api:1.7.21'
+    api 'xml-resolver:xml-resolver:1.2'
+    api 'org.slf4j:slf4j-api:1.7.21'
 
     testcode sourceSets.test.output
-}
-
-license {
-    header rootProject.file('config/license_header.txt')
-
-    // Toggle ignoreFailures to false to enable license-checking that will fail the build
-    ignoreFailures true
-
-    ext.name = 'HttpBuilder-NG Project'
-    ext.year = Calendar.instance.get(Calendar.YEAR)
-
-    excludes(['**/*.txt', '**/*.dtd', '**/*.xml', '**/*.ent', '**/*.jks'])
 }

@@ -6,8 +6,14 @@ plugins {
     id "io.github.gradle-nexus.publish-plugin" version "1.3.0"
 }
 
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
 group = 'com.ainrif.fg-net'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
 
 allprojects {
     repositories {
@@ -16,17 +22,8 @@ allprojects {
     }
 }
 
-configurations {
-    asciidoclet
-}
-
-dependencies {
-    asciidoclet 'org.asciidoctor:asciidoclet:1.+'
-}
-
 subprojects {
     apply plugin: 'groovy'
-    apply plugin: 'maven-publish'
 
     group = project.parent.group
     version = project.parent.version
@@ -34,24 +31,20 @@ subprojects {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 
-    configurations {
-        asciidoclet
-    }
-
     dependencies {
         // optionals
         [
-            'com.opencsv:opencsv:3.8',
-            'oauth.signpost:signpost-commonshttp4:1.2.1.1',
-            'oauth.signpost:signpost-core:1.2.1.1',
-            'org.apache.groovy:groovy:4.0.18',
-            'org.apache.groovy:groovy-json:4.0.18',
-            'org.apache.groovy:groovy-xml:4.0.18',
-            'org.jsoup:jsoup:1.9.2',
-            'net.sourceforge.nekohtml:nekohtml:1.9.22',
-            'com.fasterxml.jackson.core:jackson-databind:2.8.1',
-            'javax.mail:javax.mail-api:1.5.6',
-            'com.sun.mail:javax.mail:1.5.6'
+                'com.opencsv:opencsv:3.8',
+                'oauth.signpost:signpost-commonshttp4:1.2.1.1',
+                'oauth.signpost:signpost-core:1.2.1.1',
+                'org.apache.groovy:groovy:4.0.18',
+                'org.apache.groovy:groovy-json:4.0.18',
+                'org.apache.groovy:groovy-xml:4.0.18',
+                'org.jsoup:jsoup:1.9.2',
+                'net.sourceforge.nekohtml:nekohtml:1.9.22',
+                'com.fasterxml.jackson.core:jackson-databind:2.8.1',
+                'javax.mail:javax.mail-api:1.5.6',
+                'com.sun.mail:javax.mail:1.5.6'
         ].each { opt ->
             compileOnly(opt)
             testImplementation(opt)
@@ -66,80 +59,12 @@ subprojects {
         testImplementation 'ch.qos.logback:logback-classic:1.2.3'
 
         testImplementation 'junit:junit:4.13.2'
-
-        asciidoclet 'org.asciidoctor:asciidoclet:1.+'
     }
 
     test {
         systemProperty 'test.proxy.support', 'false'
         reports.html.enabled = true
         maxParallelForks = 4
-    }
-
-    javadoc {
-        options.docletpath = configurations.asciidoclet.files.asType(List)
-        options.links("http://docs.oracle.com/javase/8/docs/api/", "http://docs.groovy-lang.org/latest/html/gapi/");
-        options.doclet = 'org.asciidoctor.Asciidoclet'
-        options.overview = "src/main/java/overview.adoc"
-        options.addStringOption "-base-dir", "${projectDir}"
-        options.addStringOption "-attribute", "name=${project.name},version=${project.version},title-link=https://github.com/http-builder-ng/http-builder-ng[${project.name} ${project.version}]"
-    }
-
-    task sourcesJar(type: Jar) {
-        description = 'Creates sources jar.'
-        classifier = 'sources'
-        from project.sourceSets.main.allSource
-    }
-
-    task javadocJar(type: Jar) {
-        description = 'Creates API documentation jar.'
-        classifier = 'javadoc'
-        from javadoc
-    }
-
-    artifacts {
-        archives jar
-        archives sourcesJar
-        archives javadocJar
-    }
-
-    publishing {
-        publications {
-            httpbPublication(MavenPublication) {
-                from components.java
-                artifact sourcesJar
-                artifact javadocJar
-                groupId project.group
-                artifactId project.name
-                version project.version
-                pom.withXml {
-                    def root = asNode()
-                    root.appendNode('description', 'Groovy client for making http requests.')
-                    root.appendNode('name', project.name)
-                    root.appendNode('url', 'https://http-builder-ng.github.io/http-builder-ng/')
-
-                    def licenseNode = root.appendNode('licenses').appendNode('license')
-                    licenseNode.appendNode('name', 'The Apache Software License, Version 2.0')
-                    licenseNode.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
-                    licenseNode.appendNode('distribution', 'repo')
-
-                    def developersNode = root.appendNode('developers')
-                    def developerNode = developersNode.appendNode('developer')
-                    developerNode.appendNode('id', 'dwclark')
-                    developerNode.appendNode('name', 'David Clark')
-
-                    developerNode = developersNode.appendNode('developer')
-                    developerNode.appendNode('id', 'cjstehno')
-                    developerNode.appendNode('name', 'Christopher J Stehno')
-                    developerNode.appendNode('email', 'chris@stehno.com')
-
-                    def scmNode = root.appendNode('scm')
-                    scmNode.appendNode('connection', 'scm:git:git@github.com:http-builder-ng/http-builder-ng.git')
-                    scmNode.appendNode('developerConnection', 'scm:git:git@github.com:http-builder-ng/http-builder-ng.git')
-                    scmNode.appendNode('url', 'https://github.com/http-builder-ng/http-builder-ng')
-                }
-            }
-        }
     }
 
     tasks.withType(JavaCompile) {
@@ -153,31 +78,29 @@ asciidoctor {
     backends = ['html5']
 
     attributes 'source-highlighter': 'coderay',
-        'coderay-linenums-mode': 'table',
-        icon: 'font',
-        linkattrs: true,
-        encoding: 'utf-8'
+            'coderay-linenums-mode': 'table',
+            icon: 'font',
+            linkattrs: true,
+            encoding: 'utf-8'
 }
 
 tasks.site.dependsOn = [
-    'build', 'core:build', 'apache-provider:build',
-    'core:javadoc', 'apache-provider:javadoc',
-    'aggregateJavadoc', 'aggregateTestReport',
-    'asciidoctor'
+        'build', 'core:build', 'apache-provider:build',
+        'aggregateTestReport',
+        'asciidoctor'
 ]
 
 site {
     siteUrl = 'https://http-builder-ng.github.io/http-builder-ng/'
 
-    assetDir( 'core/build/reports', into:'core', external:true )
-    assetDir( 'apache-provider/build/reports', into:'apache', external:true )
+    assetDir('core/build/reports', into: 'core', external: true)
+    assetDir('apache-provider/build/reports', into: 'apache', external: true)
 
     versionedFile 'src/docs/asciidoc/index.adoc'
     versionedFile 'src/docs/asciidoc/configuration.adoc'
     versionedFile 'src/docs/asciidoc/examples.adoc'
 
     testedPath '/guide/html5/index.html'
-    testedPath '/core/javadoc/index.html'
 }
 
 task publishSite(type: GradleBuild, group: 'Publishing', description: 'Publishes the documentation web site.', dependsOn: ['site']) {
@@ -190,13 +113,13 @@ task verifyArtifacts(group: 'Verification', description: 'Verifies that the publ
         def base = 'https://dl.bintray.com/http-builder-ng/dclark/org/codehaus/groovy/modules'
         ///${project.version}/"
         def artifacts = [
-            "$base/core/$project.version/core-$project.version-sources.jar",
-            "$base/core/$project.version/core-${project.version}.jar",
-            "$base/core/$project.version/core-${project.version}.pom",
+                "$base/core/$project.version/core-$project.version-sources.jar",
+                "$base/core/$project.version/core-${project.version}.jar",
+                "$base/core/$project.version/core-${project.version}.pom",
 
-            "$base/apache-provider/$project.version/apache-provider-$project.version-sources.jar",
-            "$base/apache-provider/$project.version/apache-provider-${project.version}.jar",
-            "$base/apache-provider/$project.version/apache-provider-${project.version}.pom",
+                "$base/apache-provider/$project.version/apache-provider-$project.version-sources.jar",
+                "$base/apache-provider/$project.version/apache-provider-${project.version}.jar",
+                "$base/apache-provider/$project.version/apache-provider-${project.version}.pom",
         ]
 
         logger.lifecycle "Verifying that artifacts exist at $base..."
@@ -212,10 +135,10 @@ task verifyArtifacts(group: 'Verification', description: 'Verifies that the publ
 }
 
 task release(group: 'Development', description: 'Release a new version of the library.', dependsOn: [
-    'checkVersion',
-    'clean', 'core:clean', 'apache-provider:clean',
-    'build', 'core:build', 'apache-provider:build',
-    'publishSite'
+        'checkVersion',
+        'clean', 'core:clean', 'apache-provider:clean',
+        'build', 'core:build', 'apache-provider:build',
+        'publishSite'
 ]) {
     doLast {
         logger.lifecycle 'Library has been released - confirm the Bintray publications and run "./gradlew verifyRelease"'
@@ -227,24 +150,6 @@ task verifyRelease(group: 'Verification', description: 'Verifies that the releas
         logger.lifecycle 'Release has been verified.'
     }
 }
-
-def publishedProjects = subprojects.findAll()
-
-task aggregateJavadoc(type: Javadoc, group: 'Documentation') {
-    description = 'Generates an aggregated Javadoc document.'
-
-    source publishedProjects.collect { it.sourceSets.main.allJava }
-    classpath = files(publishedProjects.collect { it.sourceSets.main.compileClasspath })
-    destinationDir = file("${buildDir}/docs/javadoc")
-
-    options.docletpath = configurations.asciidoclet.files.asType(List)
-    options.links('http://docs.oracle.com/javase/8/docs/api/', 'http://docs.groovy-lang.org/latest/html/gapi/');
-    options.doclet = 'org.asciidoctor.Asciidoclet'
-    options.overview = 'src/docs/overview.adoc'
-    options.addStringOption "-base-dir", "${projectDir}"
-    options.addStringOption "-attribute", "name=${project.name},version=${project.version},title-link=https://github.com/http-builder-ng/http-builder-ng[${project.name} ${project.version}]"
-}
-
 
 task aggregateTestReport(type: TestReport) {
     destinationDir = file("$buildDir/reports/allTests")

@@ -1,29 +1,14 @@
 plugins {
-    id "com.github.hierynomus.license" version "0.13.1"
+    id 'java-library'
 }
+
+apply from: "$rootDir/gradle/pkg_deploy.gradle"
 
 dependencies {
     implementation project(':core')
 
-    implementation 'org.apache.httpcomponents:httpclient:4.5.2'
-    implementation 'org.apache.httpcomponents:httpmime:4.5.2'
-
-    // copied from core because of java-library issue
-    implementation 'xml-resolver:xml-resolver:1.2'
-    implementation 'org.slf4j:slf4j-api:1.7.21'
-    // ^^^
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.14'
 
     testImplementation project(path: ':core', configuration: 'testcode')
-}
-
-license {
-    header rootProject.file('config/license_header.txt')
-
-    // Toggle ignoreFailures to false to enable license-checking that will fail the build
-    ignoreFailures true
-
-    ext.name = 'HttpBuilder-NG Project'
-    ext.year = Calendar.instance.get(Calendar.YEAR)
-
-    excludes(['**/*.txt', '**/*.dtd', '**/*.xml', '**/*.ent', '**/*.jks'])
 }

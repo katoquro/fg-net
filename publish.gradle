@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -11,7 +11,7 @@ buildscript {
 apply plugin: 'org.ajoberstar.github-pages'
 
 githubPages {
-    repoUri = 'git@github.com:http-builder-ng/http-builder-ng'
+    repoUri = 'git@github.com:katoquro/fg-net.git'
     pages {
         from(file('build/site')) {
             into '.'

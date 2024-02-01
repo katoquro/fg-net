@@ -13,10 +13,11 @@ jar {
     }
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier.set('javadoc')
-    from javadoc
-}
+// current project javadoc are written in ascidoc adn default java cannot process them
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    archiveClassifier.set('javadoc')
+//    from javadoc
+//}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     archiveClassifier.set('sources')
@@ -38,7 +39,7 @@ publishing {
             from components.java
 
             artifact sourcesJar
-            artifact javadocJar
+            // artifact javadocJar
         }
     }
 }
@@ -52,13 +53,13 @@ void customizePom(pom) {
     pom.withXml {
         def root = asNode()
 
-        def githubPage = 'https://github.com/ainrif/acorn'
+        def githubPage = 'https://github.com/katoquro/fg-net'
 
         root.children().last() + {
             resolveStrategy = Closure.DELEGATE_FIRST
 
             name project.name
-            description 'The Acorn lets you create archetypes for any kind of project or file structures.'
+            description 'Fluent Groovy (and Java of course) network client'
 
             url githubPage
 
@@ -76,7 +77,7 @@ void customizePom(pom) {
             scm {
                 url githubPage
                 connection "scm:git:${githubPage}.git"
-                developerConnection 'scm:git:git@github.com:ainrif/acorn.git'
+                developerConnection 'scm:git:git@github.com:katoquro/fg-net.git'
             }
             issueManagement {
                 system 'GitHub'
