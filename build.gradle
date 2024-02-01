@@ -160,8 +160,8 @@ asciidoctor {
 }
 
 tasks.site.dependsOn = [
-    'build', 'core:build', 'http-builder-ng-apache:build',
-    'core:javadoc', 'http-builder-ng-apache:javadoc',
+    'build', 'core:build', 'apache-provider:build',
+    'core:javadoc', 'apache-provider:javadoc',
     'aggregateJavadoc', 'aggregateTestReport',
     'asciidoctor'
 ]
@@ -170,7 +170,7 @@ site {
     siteUrl = 'https://http-builder-ng.github.io/http-builder-ng/'
 
     assetDir( 'core/build/reports', into:'core', external:true )
-    assetDir( 'http-builder-ng-apache/build/reports', into:'apache', external:true )
+    assetDir( 'apache-provider/build/reports', into:'apache', external:true )
 
     versionedFile 'src/docs/asciidoc/index.adoc'
     versionedFile 'src/docs/asciidoc/configuration.adoc'
@@ -194,9 +194,9 @@ task verifyArtifacts(group: 'Verification', description: 'Verifies that the publ
             "$base/core/$project.version/core-${project.version}.jar",
             "$base/core/$project.version/core-${project.version}.pom",
 
-            "$base/http-builder-ng-apache/$project.version/http-builder-ng-apache-$project.version-sources.jar",
-            "$base/http-builder-ng-apache/$project.version/http-builder-ng-apache-${project.version}.jar",
-            "$base/http-builder-ng-apache/$project.version/http-builder-ng-apache-${project.version}.pom",
+            "$base/apache-provider/$project.version/apache-provider-$project.version-sources.jar",
+            "$base/apache-provider/$project.version/apache-provider-${project.version}.jar",
+            "$base/apache-provider/$project.version/apache-provider-${project.version}.pom",
         ]
 
         logger.lifecycle "Verifying that artifacts exist at $base..."
@@ -213,8 +213,8 @@ task verifyArtifacts(group: 'Verification', description: 'Verifies that the publ
 
 task release(group: 'Development', description: 'Release a new version of the library.', dependsOn: [
     'checkVersion',
-    'clean', 'core:clean', 'http-builder-ng-apache:clean',
-    'build', 'core:build', 'http-builder-ng-apache:build',
+    'clean', 'core:clean', 'apache-provider:clean',
+    'build', 'core:build', 'apache-provider:build',
     'publishSite'
 ]) {
     doLast {
