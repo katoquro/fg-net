@@ -13,12 +13,20 @@ nexusPublishing {
 }
 
 group = 'com.ainrif.fg-net'
-version = '1.0.1'
+version = '1.0.2'
 
 allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+    }
+
+    configurations {
+        all {
+            it.exclude group: 'commons-logging'
+            it.exclude group: 'org.apache.logging.log4j'
+            it.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        }
     }
 }
 
@@ -35,8 +43,6 @@ subprojects {
         // optionals
         [
                 'com.opencsv:opencsv:3.8',
-                'oauth.signpost:signpost-commonshttp4:1.2.1.1',
-                'oauth.signpost:signpost-core:1.2.1.1',
                 'org.apache.groovy:groovy:4.0.18',
                 'org.apache.groovy:groovy-json:4.0.18',
                 'org.apache.groovy:groovy-xml:4.0.18',
@@ -86,7 +92,6 @@ asciidoctor {
 
 tasks.site.dependsOn = [
         'build', 'core:build', 'apache-provider:build',
-        'aggregateTestReport',
         'asciidoctor'
 ]
 
@@ -106,52 +111,4 @@ site {
 task publishSite(type: GradleBuild, group: 'Publishing', description: 'Publishes the documentation web site.', dependsOn: ['site']) {
     buildFile = 'publish.gradle'
     tasks = ['publishGhPages']
-}
-
-task verifyArtifacts(group: 'Verification', description: 'Verifies that the published artifacts exist in the remote repository.') {
-    doLast {
-        def base = 'https://dl.bintray.com/http-builder-ng/dclark/org/codehaus/groovy/modules'
-        ///${project.version}/"
-        def artifacts = [
-                "$base/core/$project.version/core-$project.version-sources.jar",
-                "$base/core/$project.version/core-${project.version}.jar",
-                "$base/core/$project.version/core-${project.version}.pom",
-
-                "$base/apache-provider/$project.version/apache-provider-$project.version-sources.jar",
-                "$base/apache-provider/$project.version/apache-provider-${project.version}.jar",
-                "$base/apache-provider/$project.version/apache-provider-${project.version}.pom",
-        ]
-
-        logger.lifecycle "Verifying that artifacts exist at $base..."
-
-        boolean published = artifacts.every { art ->
-            boolean ok = checkUrl(art)
-            logger.info " - Checking: $art: ${ok ? 'ok' : 'missing'}"
-            ok
-        }
-
-        assert published, 'Some or all of the artifacts are not published. Run with --info for more details.'
-    }
-}
-
-task release(group: 'Development', description: 'Release a new version of the library.', dependsOn: [
-        'checkVersion',
-        'clean', 'core:clean', 'apache-provider:clean',
-        'build', 'core:build', 'apache-provider:build',
-        'publishSite'
-]) {
-    doLast {
-        logger.lifecycle 'Library has been released - confirm the Bintray publications and run "./gradlew verifyRelease"'
-    }
-}
-
-task verifyRelease(group: 'Verification', description: 'Verifies that the release was successful.', dependsOn: ['verifyArtifacts', 'verifySite']) {
-    doLast {
-        logger.lifecycle 'Release has been verified.'
-    }
-}
-
-task aggregateTestReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/allTests")
-    reportOn subprojects*.test
 }
