@@ -1,3 +1,4 @@
-rootProject.name='http-builder-ng'
+rootProject.name='fg-net'
 
-include 'http-builder-ng-core', 'http-builder-ng-apache', 'http-builder-ng-okhttp'
+include ':apache-provider'
+include ':core'

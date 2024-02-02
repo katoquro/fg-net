@@ -1,0 +1,99 @@
+= FG-Net: Easy HTTP Client for Groovy (and Java of course)
+:toc: left
+
+____
+
+Project is under rebuild. It's a hard fork of original https://github.com/http-builder-ng/http-builder-ng[HttpBuilder-NG]
+
+Version 1.* is fully compatible with original project HttpBuilder-NG but on upgraded stack. I.e. supports Groovy 4.* and is built with Java 17.
+____
+
+== Links for HttpBuilder-NG and FG-Net version 1.*
+
+* Site: https://http-builder-ng.github.io/http-builder-ng/
+* User Guide: https://http-builder-ng.github.io/http-builder-ng/asciidoc/html5/
+* JavaDocs: https://http-builder-ng.github.io/http-builder-ng/docs/javadoc/
+* Original Project : https://github.com/http-builder-ng/http-builder-ng
+* Current Project: https://github.com/katoquro/fg-net
+* StackOverflow: http://stackoverflow.com/questions/tagged/httpbuilder-ng[httpbuilder-ng]
+
+== Quick Overview
+
+This is a modern Groovy DSL for making http requests. It is built against Groovy 4.x, but it doesn't make any assumptions about which version of Groovy you are using (if they are compatible). The main goal of the client is to allow you to make http requests in a natural and readable way. For example:
+
+[source,groovy]
+----
+//let's configure an http client to make calls to httpbin.org using the default http library
+def httpBin = HttpBuilder.configure {
+    request.uri = 'http://httpbin.org/'
+}
+
+//now let's GET /get endpoint at httpbin.
+//This will return a JSON formatted response with an origin property.
+def result = httpBin.get {
+    request.uri.path = '/get'
+}
+    
+println("Your ip address is: ${result.origin}")
+
+//Finally lets post a standard http form to httpbin
+httpBin.post {
+    request.uri.path = '/post'
+    request.body = [ input1: 'the first input', input2: 'the second input' ]
+    request.contentType = 'application/x-www-form-urlencoded'
+}
+
+----
+
+Hopefully that gives you a general idea of how the client works. It is designed to be compatible with Groovy code annotated with http://docs.groovy-lang.org/latest/html/gapi/groovy/transform/TypeChecked.html[@TypeChecked] and http://docs.groovy-lang.org/latest/html/gapi/groovy/transform/CompileStatic.html[@CompileStatic]. It also makes use of the http://docs.groovy-lang.org/latest/html/gapi/groovy/lang/DelegatesTo.html[@DelegatesTo] to provide better IDE support when writing code.
+
+== Artifacts
+
+The latest version: https://search.maven.org/search?q=g:%22com.ainrif.fg-net%22[image:https://img.shields.io/maven-central/v/com.ainrif.fg-net/core.svg?label=Maven%20Central&color=blue[Artifact Version]]
+
+FG-Net artifacts are available on https://central.sonatype.com/namespace/com.ainrif.fg-net[Maven Central], for Gradle you can add the following dependency to your `build.gradle` file `dependencies` closure:
+
+[source,gradle]
+----
+implementation 'com.ainrif.fg-net:core:<version>'
+----
+
+or, for Maven add the following to your `pom.xml` file:
+
+[source,xml]
+----
+<dependency>
+  <groupId>com.ainrif.fg-net</groupId>
+  <artifactId>core</artifactId>
+  <version>(version)</version>
+</dependency>
+----
+
+NOTE: You can replace `core` with `apache-provider` and will be able to build clients this Apache Http Client.
+
+
+== DevOps
+
+=== Build Instructions
+
+HttpBuilder-NG is built using https://gradle.org[gradle]. To perform a complete build run the following:
+
+[source,sh]
+----
+./gradlew clean build
+----
+
+=== Publish
+
+- configure `~/.gradle/gradle.properties` and import `Ainrif General GPG`.
+- call `./gradlew clean build publishToSonatype closeAndReleaseSonatypeStagingRepository` to release lib.
+- tag release commit with version `git tag <version from build.gradle> && git push --tags`
+
+=== Documentation
+
+NOTE: TODO TBA
+
+== Original Projects
+
+. https://github.com/http-builder-ng/http-builder-ng[HttpBuilder-NG]
+. https://github.com/jgritman/httpbuilder[jgritman/httpbuilder]

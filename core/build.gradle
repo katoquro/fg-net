@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+}
+
+apply from: "$rootDir/gradle/pkg_deploy.gradle"
+
+configurations {
+    testcode
+}
+
+dependencies {
+    api 'xml-resolver:xml-resolver:1.2'
+    api 'org.slf4j:slf4j-api:1.7.21'
+
+    testcode sourceSets.test.output
+}

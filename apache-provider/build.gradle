@@ -1,0 +1,14 @@
+plugins {
+    id 'java-library'
+}
+
+apply from: "$rootDir/gradle/pkg_deploy.gradle"
+
+dependencies {
+    api project(':core')
+
+    api 'org.apache.httpcomponents:httpclient:4.5.14'
+    api 'org.apache.httpcomponents:httpmime:4.5.14'
+
+    testImplementation project(path: ':core', configuration: 'testcode')
+}
